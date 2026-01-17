@@ -30,6 +30,15 @@ analyzer = SentimentIntensityAnalyzer()
 def preprocess_text(text: str) -> str:
     lemmatizer = WordNetLemmatizer()
     stop_words = set(stopwords.words("english"))
+    
+    # Keep sentiment-carrying stopwords
+    sentiment_words = {
+        'not', 'no', 'nor', 'never', 'neither', 'none', 'nobody', 'nothing',
+        'very', 'so', 'too', 'more', 'most', 'much', 'really', 'absolutely',
+        'only', 'just', 'even', 'still', 'but', 'however', 'yet',
+        'against', 'down', 'off', 'over', 'up', 'above', 'below'
+    }
+    stop_words = stop_words - sentiment_words
 
     # Lowercase and remove non-word characters
     text = text.lower()
