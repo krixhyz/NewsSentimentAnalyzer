@@ -84,6 +84,7 @@ def predict():
         "result.html",
         title=title,
         sentiment=sentiment_label,
+        ml_sentiment=sentiment,
         category=category,
         vader_score=vader_score,
     )

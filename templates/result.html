@@ -1,16 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
-    <h1>Prediction Result</h1>
-    <p><strong>Title:</strong> {{ title }}</p>
-    <p><strong>Sentiment (VADER):</strong> {{ sentiment }} (Score: {{ vader_score }})</p>
-    <p><strong>Category:</strong> {{ category }}</p>
-    <br>
-    <a href="/">Try another title</a>
+    <div class="container">
+        <div class="glass-card">
+            <h1>Analysis Result</h1>
+
+            <p style="font-size: 1.2rem; font-weight: 300; margin-bottom: 30px;">
+                "{{ title }}"
+            </p>
+
+            <div class="result-group">
+                <div class="result-item">
+                    <span class="result-label">VADER Sentiment <span class="source-tag">(Rule-based)</span></span>
+                    <span class="badge badge-{{ sentiment|lower }}">{{ sentiment|title }}</span>
+                </div>
+                <div class="result-item"
+                    style="padding-left: 20px; font-size: 0.9rem; border-left: 2px solid rgba(255,255,255,0.2);">
+                    <span class="result-label">Compound Score</span>
+                    <span class="result-value">{{ vader_score }}</span>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0;">
+
+                <div class="result-item">
+                    <span class="result-label">Model Sentiment <span class="source-tag">(Naive Bayes)</span></span>
+                    <span class="result-value">{{ ml_sentiment }}</span>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Category <span class="source-tag">(Logistic Regression)</span></span>
+                    <span class="result-value">{{ category }}</span>
+                </div>
+            </div>
+
+            <a href="/" class="btn">Analyze Another</a>
+        </div>
+    </div>
 </body>
+
 </html>

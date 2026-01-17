@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sentiment and Category Prediction</title>
+    <title>Sentiment Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
-    <h1>Enter a Title for Prediction</h1>
-    <form action="/predict" method="POST">
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title" required><br><br>
-        <input type="submit" value="Predict">
-    </form>
+    <div class="container">
+        <div class="glass-card">
+            <h1>Sentiment Analyzer</h1>
+            <p style="margin-bottom: 25px; opacity: 0.8;">Analyze the sentiment and category of your text.</p>
+            <form action="/predict" method="POST">
+                <input type="text" id="title" name="title" placeholder="Enter your text here..." required
+                    autocomplete="off">
+                <input type="submit" value="Analyze">
+            </form>
+        </div>
+    </div>
 </body>
+
 </html>
