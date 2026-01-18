@@ -13,9 +13,14 @@
         <div class="glass-card">
             <h1>Sentiment Analyzer</h1>
             <p style="margin-bottom: 25px; opacity: 0.8;">Analyze the sentiment and category of your text.</p>
+            {% if error %}
+            <div class="error-message">
+                <strong>Error:</strong> {{ error }}
+            </div>
+            {% endif %}
             <form action="/predict" method="POST">
-                <input type="text" id="title" name="title" placeholder="Enter your text here..." required
-                    autocomplete="off">
+                <input type="text" id="title" name="title" placeholder="Enter your text here..." 
+                    value="{{ input_text if input_text else '' }}" autocomplete="off">
                 <input type="submit" value="Analyze">
             </form>
         </div>

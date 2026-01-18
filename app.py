@@ -80,23 +80,71 @@ def predict_sentiment_and_category(title: str):
 def home():
     return render_template("index.html")
 
+# Validation function
+def validate_text(text: str) -> tuple[bool, str]:
+    """
+    Validates input text for meaningful content.
+    Returns (is_valid, error_message)
+    """
+    # Check if text is empty or only whitespace
+    if not text or not text.strip():
+        return False, "Please enter some text to analyze."
+    
+    # Check minimum length (at least 3 characters)
+    text_stripped = text.strip()
+    if len(text_stripped) < 3:
+        return False, "Text is too short. Please enter at least 3 characters."
+    
+    # Check for meaningful words (at least 2 alphanumeric characters)
+    words = re.findall(r'\b\w{2,}\b', text_stripped)
+    if len(words) == 0:
+        return False, "Please enter meaningful text with actual words."
+    
+    # Check minimum word count (at least 2 words for better analysis)
+    if len(words) < 2:
+        return False, "Text is too short. Please enter at least 2 words for accurate analysis."
+    
+    # Check if text contains only numbers
+    if text_stripped.replace(" ", "").isdigit():
+        return False, "Please enter text with words, not just numbers."
+    
+    # Check if text is just repeated characters (e.g., "aaaaaaa", "!!!!!!")
+    unique_chars = set(text_stripped.replace(" ", ""))
+    if len(unique_chars) <= 2 and len(text_stripped) > 5:
+        return False, "Please enter meaningful text, not just repeated characters."
+    
+    return True, ""
+
 # Route to handle prediction
 @app.route("/predict", methods=["POST"])
 def predict():
     title = request.form.get("title", "")
+    
+    # Validate input text
+    is_valid, error_message = validate_text(title)
+    if not is_valid:
+        return render_template("index.html", error=error_message, input_text=title)
 
-    sentiment, category, sentiment_label, vader_score = predict_sentiment_and_category(
-        title
-    )
+    try:
+        sentiment, category, sentiment_label, vader_score = predict_sentiment_and_category(
+            title
+        )
 
-    return render_template(
-        "result.html",
-        title=title,
-        sentiment=sentiment_label,
-        ml_sentiment=sentiment,
-        category=category,
-        vader_score=vader_score,
-    )
+        return render_template(
+            "result.html",
+            title=title,
+            sentiment=sentiment_label,
+            ml_sentiment=sentiment,
+            category=category,
+            vader_score=vader_score,
+        )
+    except Exception as e:
+        # Handle any unexpected errors during prediction
+        return render_template(
+            "index.html", 
+            error=f"An error occurred during analysis. Please try different text.",
+            input_text=title
+        )
 
 if __name__ == "__main__":
     # For local development; Render will use gunicorn app:app
